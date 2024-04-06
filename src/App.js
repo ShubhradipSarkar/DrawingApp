@@ -18,10 +18,17 @@ function App() {
   const [shape, setShape] = useState("");
   const [selectcolors, setSelectColors] = useState("black");
   const [selectbold, setSelectbold] = useState("7");
+  const [color, setColor] = useState("white"); // Initial color is black
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  // Function to handle color change
+  const handleColorChange = (event) => {
+    setColor(event.target.value); // Update color state with the selected color
+  };
 
   // Function to handle mouse move event and update the state array
   const handleMove = (event) => {
     event.preventDefault();
+    updateCursorPosition(event);
     if(shape==="rectangle"){
       const clientX = event.touches ? event.touches[0].clientX : event.clientX;
       const clientY = event.touches ? event.touches[0].clientY : event.clientY;
@@ -37,6 +44,7 @@ function App() {
       const newPosition = { x: clientX, y: clientY, color: selectcolors, bolds:selectbold};
   
       setPositions(prevPositions => [...prevPositions, newPosition]);
+      
     }
     
   };
@@ -54,6 +62,11 @@ function App() {
     setIsDrawing(false);
   };
 
+  const updateCursorPosition = (event) => {
+    const { clientX, clientY } = event;
+    setCursorPosition({ x: clientX, y: clientY });
+  };
+
   return (
     <div
       style={styles}
@@ -64,18 +77,12 @@ function App() {
       onTouchStart={startDrawing}
       onTouchEnd={stopDrawing}
     >
-      {/* <img src="/pencil.png" alt="" style={{height:'70px', width:'70px'}}/> */}
-      {/* Your content here */}
-      {/* <h3 style={{position:'absolute'}} onClick={()=>{
-        if(shape==="rectangle"){
-          setShape("");
-        }
-        else{
-          setShape("rectangle")
-        }
-        }}>Rectangle</h3> */}
+      <div style={{ position: 'absolute', top: cursorPosition.y, left: cursorPosition.x }}>
+        ( {cursorPosition.x}, {cursorPosition.y} )
+      </div>
 
       <div style={{position:'absolute'}}>
+        <h3>Colours</h3>
         {colors.map((clr, index) =>(
           <div style={{display:'flex', flexDirection:'row', alignItems:'center', cursor:'pointer'}}>
             <div style={{height:'20px', width:'20px', display:'flex', margin:'5px', backgroundColor:`${clr}`, cursor:'pointer'}} onClick={()=>{setSelectColors(clr)}}></div>
@@ -83,12 +90,27 @@ function App() {
           </div>
           
         ))}
+
+        <h3>Sharpness</h3>
         {bold.map((b, index) =>(
           <div style={{display:'flex', flexDirection:'row', alignItems:'center', cursor:'pointer'}}><div style={{height:`${b}px`, width:'40px', display:'flex', marginTop:'15px', marginLeft:'5px', backgroundColor:`black`}} onClick={()=>{setSelectbold(b)}}></div>
           {(selectbold===b) && <img src='/tick.png' height='20px' width='20px' />}
           </div>
           
         ))}
+
+        <h3>
+          Eraser
+        </h3>
+        <div style={{height:'20px', width:'20px', margin:'5px', border:`4px solid black`, backgroundColor:`${color}`}} onClick={()=>{setSelectColors(color)}}>
+
+        </div>
+        <input
+        type="color"
+        value={color}
+        onChange={handleColorChange}
+      />
+      
       </div>
       {positions.map((position, index) => (
         <div

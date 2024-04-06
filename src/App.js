@@ -7,7 +7,7 @@ const styles = {
   margin: 0, // Remove default margin
   padding: 0, // Remove default padding
   position: 'relative', // Enable absolute positioning for the cursor tracker
-  cursor: 'url(/pencil.png), auto'
+  cursor: 'grab',
 };
 
 function App() {
@@ -77,10 +77,17 @@ function App() {
 
       <div style={{position:'absolute'}}>
         {colors.map((clr, index) =>(
-          <div style={{height:'20px', width:'20px', display:'flex', margin:'5px', backgroundColor:`${clr}`}} onClick={()=>{setSelectColors(clr)}}></div>
+          <div style={{display:'flex', flexDirection:'row', alignItems:'center', cursor:'pointer'}}>
+            <div style={{height:'20px', width:'20px', display:'flex', margin:'5px', backgroundColor:`${clr}`, cursor:'pointer'}} onClick={()=>{setSelectColors(clr)}}></div>
+            {(selectcolors===clr) && <img src='/tick.png' height='20px' width='20px' />}
+          </div>
+          
         ))}
         {bold.map((b, index) =>(
-          <div style={{height:`${b}px`, width:'40px', display:'flex', marginTop:'15px', marginLeft:'5px', backgroundColor:`black`}} onClick={()=>{setSelectbold(b)}}></div>
+          <div style={{display:'flex', flexDirection:'row', alignItems:'center', cursor:'pointer'}}><div style={{height:`${b}px`, width:'40px', display:'flex', marginTop:'15px', marginLeft:'5px', backgroundColor:`black`}} onClick={()=>{setSelectbold(b)}}></div>
+          {(selectbold===b) && <img src='/tick.png' height='20px' width='20px' />}
+          </div>
+          
         ))}
       </div>
       {positions.map((position, index) => (

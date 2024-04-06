@@ -75,8 +75,9 @@ function App() {
 
   // Function to handle mouse move event and update the state array
   const handleMove = (event) => {
+    event.preventDefault();
     if (!isDrawing) return;
-
+    
     const clientX = event.touches ? event.touches[0].clientX : event.clientX;
     const clientY = event.touches ? event.touches[0].clientY : event.clientY;
     
@@ -87,6 +88,7 @@ function App() {
 
   // Function to start drawing when mouse is clicked or touched
   const startDrawing = (event) => {
+    event.preventDefault();
     setIsDrawing(true);
     handleMove(event);
   };
